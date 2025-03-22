@@ -65,23 +65,26 @@ class _MyHomePageState extends State<MyHomePage> {
       if(_cameras.isNotEmpty){
         setState(() {
           cameras = _cameras;
+          _selectedCameraIndex = cameras.indexOf(cameras.first) % cameras.length;
+          debugPrint('Initialized selected camera: $_selectedCameraIndex');
           _initializeCamera(_selectedCameraIndex);
         });
         await _cameraController!.initialize();
       }
       else {
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialog(title: Text("Error"),
-              content: Text('No cameras detected!'),
-              actions: [
-                TextButton(onPressed: () => Navigator.of(context).pop(), child: Text("Close"))
-              ],
-            ));
+        await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(title: Text("Error"),
+            content: Text('No cameras detected!'),
+            actions: [
+              TextButton(onPressed: () => Navigator.of(context).pop(), child: Text("Close"))
+            ],
+          )
+        );
       }
     }
     catch(e){
-      showDialog(
+      await showDialog(
         context: context,
         builder: (context) => AlertDialog(title: Text("Error"),
         content: Text(e.toString()),
@@ -93,15 +96,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _switchCamera() {
-    print(cameras.length);
-    if (cameras.length > 1 && _selectedCameraIndex < 3) {
-      _selectedCameraIndex = (_selectedCameraIndex + 1) % cameras.length;
-      print('Selected camera: ${_selectedCameraIndex}');
+    _selectedCameraIndex = (_selectedCameraIndex + 1) % cameras.length;
+    if (cameras.length > 1 && _selectedCameraIndex < 2) {
       _initializeCamera(_selectedCameraIndex);
     }
     else {
       _selectedCameraIndex = 0;
-      _initializeCamera(_selectedCameraIndex);
       _initializeCamera(_selectedCameraIndex);
     }
   }
@@ -109,31 +109,56 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
+        ],
+      ),
       body: ui(),
     );
   }
 
 
   Widget ui(){
-    if(_cameraController == null || !_cameraController!.value.isInitialized)
-      return Center(
+    if(_cameraController == null || !_cameraController!.value.isInitialized) {
+      return const Center(
         child: CircularProgressIndicator(),
       );
-    return SafeArea(
+    }
+    return Center(
         child: Column(
           children: [
-            CameraPreview(_cameraController!),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+            Stack(
+              alignment: AlignmentDirectional.center,
               children: [
-                ElevatedButton(onPressed: () => _switchCamera(), child: Icon(Icons.flip)),
-                ElevatedButton(onPressed: () => _cameraController!.setZoomLevel(1.0), child: Icon(Icons.zoom_out)),
-                ElevatedButton(onPressed: () => _cameraController!.setZoomLevel(2.0), child: Icon(Icons.zoom_in)),
-                ElevatedButton(onPressed: () => _cameraController!.startVideoRecording(), child: Icon(Icons.play_arrow)),
-                ElevatedButton(onPressed: () => _cameraController!.stopVideoRecording(), child: Icon(Icons.stop)),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: CameraPreview(_cameraController!),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SizedBox(
+                      width: 120,
+                      child: Text("Lorem ipsum ahahahah\nHEHEHE\nasdsdasdas\nasdasdasdasd\nasdasdasd\nasdasdasdad\nasdsdoqwieqw[eoqw\nasdasdwqopekqwope\n"),
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(onPressed: () => _switchCamera(), child: Icon(Icons.flip)),
+                        ElevatedButton(onPressed: () => _cameraController!.setZoomLevel(1.0), child: Icon(Icons.zoom_out)),
+                        ElevatedButton(onPressed: () => _cameraController!.setZoomLevel(2.0), child: Icon(Icons.zoom_in)),
+                        ElevatedButton(onPressed: () => _cameraController!.startVideoRecording(), child: Icon(Icons.play_arrow)),
+                        ElevatedButton(onPressed: () => _cameraController!.stopVideoRecording(), child: Icon(Icons.stop)),
+                      ],
+                    )
+                  ],
+                ),
               ],
-            )
+            ),
           ],
         ),
     );

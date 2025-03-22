@@ -142,7 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: [
                     SizedBox(
                       width: 120,
-                      child: Text("Lorem ipsum ahahahah\nHEHEHE\nasdsdasdas\nasdasdasdasd\nasdasdasd\nasdasdasdad\nasdsdoqwieqw[eoqw\nasdasdwqopekqwope\n"),
+                      child: Text("Lorem ipsum ahahahah"),
                     ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,

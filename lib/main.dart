@@ -2,7 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:camera_dev/flows/record/presentation/screens/record_screen.dart';
 import 'package:flutter/material.dart';
 
-import 'flows/record/presentation/screens/project_editor_screen.dart';
+import 'flows/record/presentation/screens/record_preview_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: RecordScreen(),
+      home: RecordPreviewScreen(),
     );
   }
 }

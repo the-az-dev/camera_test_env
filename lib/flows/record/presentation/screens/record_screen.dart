@@ -36,15 +36,31 @@ class _RecordScreen extends StatelessWidget {
           return Stack(
             fit: StackFit.expand,
             children: [
-              if (state.cameraController != null && state.cameraController!.value.isInitialized)
+
+              // CAMERA
+              if (
+                state.cameraController != null
+                &&
+                state.cameraController!.value.isInitialized
+              )
                 FittedBox(
                   fit: BoxFit.cover,
                   child:SizedBox(
                     width: state.cameraController!.value.previewSize!.height,
                     height: state.cameraController!.value.previewSize!.width,
-                    child:  CameraPreview(state.cameraController!),
+                    child:  CameraPreview(
+                      state.cameraController!,
+                      child: Text(
+                        "Text deved",
+                        style: TextStyle(
+                          color: Colors.white,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
+
+              // CAMERA INTERACTION BUTTONS
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
@@ -56,7 +72,9 @@ class _RecordScreen extends StatelessWidget {
                         iconSize: 30.0,
                         color: Colors.black,
                         style: ButtonStyle(
-                          backgroundColor: WidgetStateProperty.all<Color>(Colors.white),
+                          backgroundColor: WidgetStateProperty.all<Color>(
+                              Colors.white,
+                          ),
                           shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
@@ -70,7 +88,7 @@ class _RecordScreen extends StatelessWidget {
                         iconSize: 30.0,
                         color: Colors.redAccent,
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                          backgroundColor: WidgetStateProperty.all<Color>(Colors.white),
                         ),
                         onPressed: () {},
                         icon: Icon(Icons.circle),
@@ -79,8 +97,8 @@ class _RecordScreen extends StatelessWidget {
                         iconSize: 30.0,
                         color: Colors.black,
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          backgroundColor: WidgetStateProperty.all<Color>(Colors.white),
+                          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -94,7 +112,25 @@ class _RecordScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-              )
+              ),
+
+              // Scrolling Speed Slider
+              Positioned(
+                bottom: 10,
+                left: 20,
+                right: 20,
+                child: Slider(
+                  value: 1,
+                  min: 0.0,
+                  max: 200.0,
+                  divisions: 20,
+                  label: '',
+                  onChanged: (value) {
+
+                  },
+                ),
+              ),
+
             ],
           );
         },

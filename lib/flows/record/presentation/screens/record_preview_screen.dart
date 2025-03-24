@@ -50,47 +50,78 @@ class _RecordPreviewScreen extends StatelessWidget {
                   previous.cameras != current.cameras,
               builder: (context, recordState) {
                 return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     if (recordState.cameraController != null)
-                      Stack(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(16.0),
-                            child: SizedBox(
-                              height: recordState.cameraController!.value.previewSize!.width * 0.7,
-                              width: recordState.cameraController!.value.previewSize!.height,
+                      Padding(
+                        padding: EdgeInsets.all(
+                            20.0,
+                        ),
+                        child: Stack(
+                          children: [
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.75,
                               child: CameraPreview(
                                 recordState.cameraController!,
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
+                                    BlocBuilder<ProjectCubit, ProjectState>(
+                                      builder: (context, state) {
+                                        if(state.isPositionSlider)
+                                        {
+                                          return Padding(
+                                            padding: EdgeInsets.all(20.0),
+                                            child:Slider(
+                                              value: state.promptPosition,
+                                              min: -1.0,
+                                              max: 1.25,
+                                              onChanged: (value) => context.read<ProjectCubit>().changeTextPosition(value),
+                                            ),
+                                          );
+                                        }
+                                        if(state.isFontSizeSlider)
+                                        {
+                                          return Padding(
+                                            padding: EdgeInsets.all(20.0),
+                                            child:Slider(
+                                              value: state.fontSize,
+                                              min: 15,
+                                              max: 30,
+                                              onChanged: (value) => context.read<ProjectCubit>().changeFontSize(value),
+                                            ),
+                                          );
+                                        }
+                                        return SizedBox();
+                                      },
+                                    ),
                                     Padding(
                                       padding: EdgeInsets.only(bottom: 20.0),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                                         children: [
-                                          IconButton(
-                                            iconSize: 30.0,
-                                            color: Colors.redAccent,
-                                            style: ButtonStyle(
-                                              backgroundColor: WidgetStateProperty.all<Color>(
-                                                  Colors.white,
-                                              ),
-                                            ),
-                                            onPressed: () {},
-                                            icon: Icon(Icons.circle),
+                                          SizedBox(
+                                            width: 50.0,
                                           ),
                                           IconButton(
                                             iconSize: 30.0,
-                                            color: Colors.black,
+                                            color: Colors.grey,
                                             style: ButtonStyle(
-                                              backgroundColor: WidgetStateProperty.all<Color>(
-                                                  Colors.white,
+                                              backgroundColor: WidgetStateProperty
+                                              .all<Color>(
+                                                Colors.white,
                                               ),
-                                              shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                                                RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(8),
-                                                ),
+                                            ),
+                                            onPressed: () {},
+                                            icon: Icon(Icons.circle_outlined),
+                                          ),
+                                          IconButton(
+                                            iconSize: 30.0,
+                                            color: Colors.grey,
+                                            style: ButtonStyle(
+                                              backgroundColor: WidgetStateProperty
+                                              .all<Color>(
+                                                Colors.white,
                                               ),
                                             ),
                                             onPressed: () {
@@ -105,45 +136,58 @@ class _RecordPreviewScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(20.0),
-                            child: Align(
-                              alignment: Alignment(1.5, 2),
-                              child: SizedBox(
-                                width: (MediaQuery.of(context).size.width * 0.75),
-                                child: Text(
-                                  projectState.promptContent,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700,
-                                    shadows: [
-                                      Shadow(
-                                          blurRadius: 4.0
+                            BlocBuilder<ProjectCubit, ProjectState>(
+                              builder: (context, projectState) {
+                                return Padding(
+                                  padding: EdgeInsets.all(20.0),
+                                  child: Align(
+                                    alignment: Alignment(projectState.promptPosition, 0),
+                                    child: SizedBox(
+                                      width: MediaQuery.of(context).size.width * 0.5,
+                                      height: 300,
+                                      child: ListView(
+                                        children: [
+                                          Text(
+                                            projectState.promptContent,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w700,
+                                              shadows: [
+                                                Shadow(blurRadius: 4.0),
+                                              ],
+                                              fontSize: projectState.fontSize,
+                                            ),
+                                          ),
+                                        ],
                                       )
-                                    ],
+                                    ),
                                   ),
-                                ),
-                              ),
+                                );
+                              },
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       )
                     else
-                      const Center(child: Text('Camera not found')),
+                      const Center(child: Text('Camera not found! '
+                          'Please, check permissions!')),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         // Direction
                         TextToolbarComponent(
-                          onTap: () {},
-                          title: "Direction",
+                          onTap: () {
+                            context.read<ProjectCubit>().openPositionSlider(!(projectState.isPositionSlider));
+                          },
+                          title: "Position",
                           icon: Icons.compare_arrows,
                         ),
 
                         // Font Size
                         TextToolbarComponent(
-                          onTap: () {},
+                          onTap: () {
+                            context.read<ProjectCubit>().openFontSizeSlider(!(projectState.isFontSizeSlider));
+                          },
                           title: "Font size",
                           icon: Icons.font_download_outlined,
                         ),

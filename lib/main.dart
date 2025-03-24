@@ -1,6 +1,5 @@
-import 'package:camera/camera.dart';
-import 'package:camera_dev/flows/record/presentation/screens/record_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import 'flows/record/presentation/screens/record_preview_screen.dart';
 

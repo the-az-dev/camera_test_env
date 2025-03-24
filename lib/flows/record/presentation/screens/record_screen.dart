@@ -1,6 +1,4 @@
 import 'package:camera/camera.dart';
-import 'package:camera_dev/common/widgets/app_bars/app_bar_type.dart';
-import 'package:camera_dev/common/widgets/dev_scaffold.dart';
 import 'package:camera_dev/flows/record/presentation/logic/record/record_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,12 +33,18 @@ class _RecordScreen extends StatelessWidget {
           if(state.cameraController == null){
             return Center(child: Text("Camera is not accepted! Check permissions on settings!"),);
           }
-          // final cubit = context.read<RecordCubit>().cameraController
           return Stack(
             fit: StackFit.expand,
             children: [
               if (state.cameraController != null && state.cameraController!.value.isInitialized)
-                CameraPreview(state.cameraController!),
+                FittedBox(
+                  fit: BoxFit.cover,
+                  child:SizedBox(
+                    width: state.cameraController!.value.previewSize!.height,
+                    height: state.cameraController!.value.previewSize!.width,
+                    child:  CameraPreview(state.cameraController!),
+                    ),
+                  ),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(

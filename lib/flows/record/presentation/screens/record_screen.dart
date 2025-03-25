@@ -1,6 +1,4 @@
 import 'package:camera/camera.dart';
-import 'package:camera_dev/common/widgets/app_bars/app_bar_type.dart';
-import 'package:camera_dev/common/widgets/dev_scaffold.dart';
 import 'package:camera_dev/flows/record/presentation/logic/record/record_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,15 +30,39 @@ class _RecordScreen extends StatelessWidget {
             );
           }
 
-          if(state.cameraController == null){
+          if(context.read<RecordCubit>().cameraController == null){
             return Center(child: Text("Camera is not accepted! Check permissions on settings!"),);
           }
-          // final cubit = context.read<RecordCubit>().cameraController
           return Stack(
             fit: StackFit.expand,
             children: [
-              if (state.cameraController != null && state.cameraController!.value.isInitialized)
-                CameraPreview(state.cameraController!),
+
+              // CAMERA
+              if (
+                context.read<RecordCubit>().cameraController != null
+                &&
+                context.read<RecordCubit>().cameraController!.value.isInitialized
+              )
+                FittedBox(
+                  fit: BoxFit.cover,
+                  child:SizedBox(
+                    width: context.read<RecordCubit>().cameraController!
+                        .value.previewSize!.height,
+                    height: context.read<RecordCubit>().cameraController!
+                        .value.previewSize!.width,
+                    child:  CameraPreview(
+                      context.read<RecordCubit>().cameraController!,
+                      child: Text(
+                        "Text deved",
+                        style: TextStyle(
+                          color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+              // CAMERA INTERACTION BUTTONS
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
@@ -52,7 +74,9 @@ class _RecordScreen extends StatelessWidget {
                         iconSize: 30.0,
                         color: Colors.black,
                         style: ButtonStyle(
-                          backgroundColor: WidgetStateProperty.all<Color>(Colors.white),
+                          backgroundColor: WidgetStateProperty.all<Color>(
+                              Colors.white,
+                          ),
                           shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
@@ -66,7 +90,7 @@ class _RecordScreen extends StatelessWidget {
                         iconSize: 30.0,
                         color: Colors.redAccent,
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                          backgroundColor: WidgetStateProperty.all<Color>(Colors.white),
                         ),
                         onPressed: () {},
                         icon: Icon(Icons.circle),
@@ -75,8 +99,8 @@ class _RecordScreen extends StatelessWidget {
                         iconSize: 30.0,
                         color: Colors.black,
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          backgroundColor: WidgetStateProperty.all<Color>(Colors.white),
+                          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -90,7 +114,25 @@ class _RecordScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-              )
+              ),
+
+              // Scrolling Speed Slider
+              Positioned(
+                bottom: 10,
+                left: 20,
+                right: 20,
+                child: Slider(
+                  value: 1,
+                  min: 0.0,
+                  max: 200.0,
+                  divisions: 20,
+                  label: '',
+                  onChanged: (value) {
+
+                  },
+                ),
+              ),
+
             ],
           );
         },

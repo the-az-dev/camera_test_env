@@ -1,5 +1,3 @@
-import 'package:camera/camera.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -11,16 +9,8 @@ class ProjectCubit extends Cubit<ProjectState>{
     _init();
   }
 
-  CameraController? cameraController;
-
   Future<void> _init() async{
     emit(state.copyWith(status: ProjectStatus.success));
-
-  }
-
-  @override
-  Future<void> close() {
-    return super.close();
   }
 
   void changeTextPosition(value){
@@ -35,18 +25,16 @@ class ProjectCubit extends Cubit<ProjectState>{
     ));
   }
 
-  void openPositionSlider(bool value){
-    emit(state.copyWith(
-      isPositionSlider: value,
-      isFontSizeSlider: false
-    ));
+  void openToolSlider(String key){
+    final updatedToolsState = Map<String, bool>.from(state.toolsState)
+      ..updateAll((_, __) => false)
+      ..[key] = true;
+
+    emit(state.copyWith(toolsState: updatedToolsState));
   }
 
-  void openFontSizeSlider(bool value){
-    emit(state.copyWith(
-      isFontSizeSlider: value,
-      isPositionSlider: false
-    ));
+  @override
+  Future<void> close() {
+    return super.close();
   }
-
 }

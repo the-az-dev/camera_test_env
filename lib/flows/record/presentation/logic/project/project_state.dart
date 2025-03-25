@@ -11,8 +11,13 @@ class ProjectState extends Equatable {
     Faucibus in faucibus sollicitudin proin lectus sed posuere quis. 
     Eu commodo a pretium felis gravida. 
     Felis vel egestas tincidunt sem.''',
-    this.isPositionSlider = false,
-    this.isFontSizeSlider = false,
+    this.toolsState = const {
+      'Position': false,
+      'Font size': false,
+      'Speed': false,
+      'Start point': false,
+      'Count': false
+    },
     this.promptPosition = 0.0,
     this.fontSize = 15.0,
     this.countDown = 0,
@@ -22,8 +27,7 @@ class ProjectState extends Equatable {
   final ProjectStatus status;
   final String projectName;
   final String promptContent;
-  final bool isPositionSlider;
-  final bool isFontSizeSlider;
+  final Map<String, bool> toolsState;
   final double promptPosition;
   final double fontSize;
   final int countDown;
@@ -35,6 +39,7 @@ class ProjectState extends Equatable {
     ProjectStatus? status,
     String? projectName,
     String? promptContent,
+    Map<String, bool>? toolsState,
     bool? isPositionSlider,
     bool? isFontSizeSlider,
     double? promptPosition,
@@ -46,8 +51,7 @@ class ProjectState extends Equatable {
       status: status ?? this.status,
       projectName: projectName ?? this.projectName,
       promptContent: promptContent ?? this.promptContent,
-      isPositionSlider: isPositionSlider ?? this.isPositionSlider,
-      isFontSizeSlider: isFontSizeSlider ?? this.isFontSizeSlider,
+      toolsState: toolsState ?? this.toolsState,
       promptPosition: promptPosition ?? this.promptPosition,
       fontSize: fontSize ?? this.fontSize,
       countDown: countDown ?? this.countDown,
@@ -60,8 +64,7 @@ class ProjectState extends Equatable {
     status,
     projectName,
     promptContent,
-    isPositionSlider,
-    isFontSizeSlider,
+    toolsState,
     promptPosition,
     fontSize,
     countDown,

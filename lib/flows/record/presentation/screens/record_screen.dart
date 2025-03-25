@@ -30,7 +30,7 @@ class _RecordScreen extends StatelessWidget {
             );
           }
 
-          if(state.cameraController == null){
+          if(context.read<RecordCubit>().cameraController == null){
             return Center(child: Text("Camera is not accepted! Check permissions on settings!"),);
           }
           return Stack(
@@ -39,17 +39,19 @@ class _RecordScreen extends StatelessWidget {
 
               // CAMERA
               if (
-                state.cameraController != null
+                context.read<RecordCubit>().cameraController != null
                 &&
-                state.cameraController!.value.isInitialized
+                context.read<RecordCubit>().cameraController!.value.isInitialized
               )
                 FittedBox(
                   fit: BoxFit.cover,
                   child:SizedBox(
-                    width: state.cameraController!.value.previewSize!.height,
-                    height: state.cameraController!.value.previewSize!.width,
+                    width: context.read<RecordCubit>().cameraController!
+                        .value.previewSize!.height,
+                    height: context.read<RecordCubit>().cameraController!
+                        .value.previewSize!.width,
                     child:  CameraPreview(
-                      state.cameraController!,
+                      context.read<RecordCubit>().cameraController!,
                       child: Text(
                         "Text deved",
                         style: TextStyle(
